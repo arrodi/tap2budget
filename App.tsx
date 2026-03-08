@@ -509,9 +509,9 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#8fdc5f',
+    backgroundColor: '#D4E97A',
   },
-  dotActive: { backgroundColor: '#14b85a', width: 22 },
-  dotLabel: { color: '#2f7a52', fontSize: 12 },
-  dotLabelActive: { color: '#0f5a36', fontWeight: '800' },
+  dotActive: { backgroundColor: '#166B2A', width: 22 },
+  dotLabel: { color: '#2f7a43', fontSize: 12 },
+  dotLabelActive: { color: '#166B2A', fontWeight: '800' },
 });

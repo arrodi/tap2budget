@@ -14,7 +14,6 @@ import {
   View,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { TransactionCategory, TransactionType } from '../domain/types';
 
 type Props = {
@@ -31,26 +30,6 @@ type Props = {
   onSave: (input?: { dateIso?: string; recurrence?: 'none' | 'weekly' | 'monthly' }) => Promise<boolean>;
   onCreateRecurring: (input: { frequency: 'weekly' | 'monthly'; label: string }) => Promise<void>;
 };
-
-function FadingDivider({ darkMode }: { darkMode?: boolean }) {
-  const color = darkMode ? '#d6f5df' : '#1d5b38';
-  return (
-    <View style={styles.fadingDividerWrap} pointerEvents="none">
-      <Svg width="100%" height="2" viewBox="0 0 100 2" preserveAspectRatio="none">
-        <Defs>
-          <LinearGradient id="fadeLine" x1="0%" y1="0%" x2="100%" y2="0%">
-            <Stop offset="0%" stopColor={color} stopOpacity="0" />
-            <Stop offset="15%" stopColor={color} stopOpacity="0.35" />
-            <Stop offset="50%" stopColor={color} stopOpacity="0.6" />
-            <Stop offset="85%" stopColor={color} stopOpacity="0.35" />
-            <Stop offset="100%" stopColor={color} stopOpacity="0" />
-          </LinearGradient>
-        </Defs>
-        <Rect x="0" y="0" width="100" height="1" fill="url(#fadeLine)" />
-      </Svg>
-    </View>
-  );
-}
 
 export function AddTransactionScreen({
   darkMode,
@@ -177,13 +156,11 @@ export function AddTransactionScreen({
           ]}
           onPress={() => setTypeModalOpen(true)}
         >
-          <Text style={[styles.typeButtonValue, selectedType === 'income' ? styles.typeButtonValueIncome : styles.typeButtonValueExpense]}>{selectedType === 'income' ? 'Income' : 'Expense'}</Text>
-          <FadingDivider darkMode={darkMode} />
+          <Text style={styles.typeButtonValue}>{selectedType === 'income' ? 'Income' : 'Expense'}</Text>
         </Pressable>
 
         <Pressable style={[styles.categoryButton, darkMode && styles.rowDark]} onPress={() => setCategoryModalOpen(true)}>
           <Text style={[styles.categoryButtonValue, darkMode && styles.textDark]}>{categoryChosen ? selectedCategory : 'Category'}</Text>
-          <FadingDivider darkMode={darkMode} />
         </Pressable>
 
         {advanced ? (
@@ -200,7 +177,6 @@ export function AddTransactionScreen({
               <Text style={[styles.categoryButtonValue, darkMode && styles.textDark]}>
                 {freq === 'none' ? 'Recurrence' : freq === 'monthly' ? 'Monthly' : 'Weekly'}
               </Text>
-              <FadingDivider darkMode={darkMode} />
             </Pressable>
 
             <Pressable
@@ -210,7 +186,6 @@ export function AddTransactionScreen({
               <Text style={[styles.advancedText, darkMode && styles.textDark]}>
                 {useCustomDate ? 'Use custom date/time: ON' : 'Use custom date/time'}
               </Text>
-              <FadingDivider darkMode={darkMode} />
             </Pressable>
 
             {useCustomDate ? (
@@ -235,10 +210,7 @@ export function AddTransactionScreen({
           ]}
           onPress={onPressSave}
         >
-          <Text style={[styles.saveBtnText, selectedType === 'income' ? styles.typeButtonValueIncome : styles.typeButtonValueExpense]}>
-            {isSaving ? 'Saving…' : saveDone ? 'Saved ✓' : 'Save transaction'}
-          </Text>
-          <FadingDivider darkMode={darkMode} />
+          <Text style={styles.saveBtnText}>{isSaving ? 'Saving…' : saveDone ? 'Saved ✓' : 'Save transaction'}</Text>
         </Pressable>
 
         <Pressable
@@ -335,31 +307,28 @@ const styles = StyleSheet.create({
   amountInputDark: { color: '#d6f5df' },
   input: { backgroundColor: 'rgba(255,255,255,0.78)', borderWidth: 1, borderColor: 'rgba(24,94,52,0.16)', color: '#0f5a36', borderRadius: 16, paddingHorizontal: 16, paddingVertical: 13, fontSize: 18, fontWeight: '600' },
   inputDark: { backgroundColor: 'rgba(9,24,16,0.7)', borderColor: '#26523a', color: '#d6f5df' },
-  rowDark: { backgroundColor: 'transparent' },
+  rowDark: { backgroundColor: 'rgba(0,0,0,0.24)' },
   label: { color: '#166534', fontWeight: '700', fontSize: 16 },
-  categoryButton: { minHeight: 56, width: '100%', borderRadius: 0, borderWidth: 0, backgroundColor: 'transparent', paddingHorizontal: 16, alignItems: 'center', justifyContent: 'center', position: 'relative' },
-  typeButtonIncome: { backgroundColor: 'transparent', borderColor: 'transparent' },
-  typeButtonExpense: { backgroundColor: 'transparent', borderColor: 'transparent' },
-  typeButtonValue: { fontWeight: '800', fontSize: 18, textAlign: 'center' },
-  typeButtonValueIncome: { color: '#198754' },
-  typeButtonValueExpense: { color: '#c0392b' },
+  categoryButton: { minHeight: 56, width: '100%', borderRadius: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.25)', backgroundColor: 'rgba(255,255,255,0.28)', paddingHorizontal: 16, alignItems: 'center', justifyContent: 'center' },
+  typeButtonIncome: { backgroundColor: '#15a34a', borderColor: '#15803d' },
+  typeButtonExpense: { backgroundColor: '#dc2626', borderColor: '#b91c1c' },
+  typeButtonValue: { color: '#ffffff', fontWeight: '800', fontSize: 18, textAlign: 'center' },
   categoryButtonValue: { color: '#12492b', fontWeight: '700', fontSize: 18, textAlign: 'center' },
-  fadingDividerWrap: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 2, justifyContent: 'center' },
   rowGap: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   pill: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 999, borderWidth: 1, borderColor: '#a9e6b7', backgroundColor: '#e6f4ea' },
   pillActive: { backgroundColor: '#14b85a', borderColor: '#14b85a' },
   pillText: { color: '#1e6e37', fontWeight: '600' },
   pillTextActive: { color: 'white' },
-  advancedBtn: { width: '100%', borderWidth: 0, borderRadius: 0, paddingVertical: 12, alignItems: 'center', backgroundColor: 'transparent', position: 'relative' },
+  advancedBtn: { width: '100%', borderWidth: 1, borderColor: 'rgba(24,94,52,0.14)', borderRadius: 16, paddingVertical: 12, alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.22)' },
   advancedText: { color: '#166534', fontWeight: '700' },
   advancedHintWrap: { alignItems: 'center', justifyContent: 'center', paddingTop: 4, paddingBottom: 2 },
   advancedHint: { color: '#6f8f78', fontSize: 12, fontWeight: '500' },
-  saveBtn: { marginTop: 'auto', width: '100%', borderWidth: 0, borderRadius: 0, paddingVertical: 16, alignItems: 'center', backgroundColor: 'transparent', position: 'relative' },
-  saveBtnIncome: { backgroundColor: 'transparent' },
-  saveBtnExpense: { backgroundColor: 'transparent' },
-  saveBtnDone: { backgroundColor: 'transparent' },
+  saveBtn: { marginTop: 'auto', width: '100%', borderWidth: 0, borderRadius: 18, paddingVertical: 16, alignItems: 'center' },
+  saveBtnIncome: { backgroundColor: '#0f8d45' },
+  saveBtnExpense: { backgroundColor: '#c92a2a' },
+  saveBtnDone: { backgroundColor: '#0c6e36' },
   saveBtnDisabled: { opacity: 0.7 },
-  saveBtnText: { color: '#12492b', fontWeight: '800', fontSize: 18 },
+  saveBtnText: { color: 'white', fontWeight: '800', fontSize: 18 },
   modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', alignItems: 'center', justifyContent: 'center', padding: 20 },
   modalCard: { width: '100%', maxWidth: 520, backgroundColor: '#e6f4ea', borderRadius: 16, borderWidth: 1, borderColor: '#b8efc4', padding: 14, gap: 12 },
   modalTitle: { fontSize: 18, fontWeight: '800', color: '#166534' },

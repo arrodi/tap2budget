@@ -57,11 +57,6 @@ export function AddTransactionScreen({
   const amountAccessoryId = 'amountKeyboardAccessory';
   const [switchWidth, setSwitchWidth] = useState(0);
   const typeAnim = useRef(new Animated.Value(selectedType === 'income' ? 1 : 0)).current;
-  const recurrenceAnims = useRef({
-    weekly: new Animated.Value(freq === 'weekly' ? 1 : 0),
-    biweekly: new Animated.Value(freq === 'biweekly' ? 1 : 0),
-    monthly: new Animated.Value(freq === 'monthly' ? 1 : 0),
-  }).current;
 
 
 
@@ -93,19 +88,6 @@ export function AddTransactionScreen({
       tension: 90,
     }).start();
   }, [selectedType, typeAnim]);
-
-  useEffect(() => {
-    Animated.parallel(
-      (['weekly', 'biweekly', 'monthly'] as const).map((key) =>
-        Animated.spring(recurrenceAnims[key], {
-          toValue: freq === key ? 1 : 0,
-          useNativeDriver: true,
-          friction: 7,
-          tension: 110,
-        })
-      )
-    ).start();
-  }, [freq, recurrenceAnims]);
 
   const onToggleType = () => {
     onChangeType(selectedType === 'income' ? 'expense' : 'income');
@@ -232,28 +214,14 @@ export function AddTransactionScreen({
                 { key: 'monthly', label: 'Monthly' },
               ] as const).map((opt) => {
                 const selected = freq === opt.key;
-                const anim = recurrenceAnims[opt.key];
                 return (
-                  <Animated.View
+                  <Pressable
                     key={opt.key}
-                    style={[
-                      styles.recurrenceBtnWrap,
-                      {
-                        transform: [
-                          {
-                            scale: anim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.04] }),
-                          },
-                        ],
-                      },
-                    ]}
+                    style={[styles.recurrenceBtn, selected && styles.recurrenceBtnActive]}
+                    onPress={() => setFreq((prev) => (prev === opt.key ? 'none' : opt.key))}
                   >
-                    <Pressable
-                      style={[styles.recurrenceBtn, selected && styles.recurrenceBtnActive]}
-                      onPress={() => setFreq((prev) => (prev === opt.key ? 'none' : opt.key))}
-                    >
-                      <Text style={[styles.recurrenceBtnText, selected && styles.recurrenceBtnTextActive]}>{opt.label}</Text>
-                    </Pressable>
-                  </Animated.View>
+                    <Text style={[styles.recurrenceBtnText, selected && styles.recurrenceBtnTextActive]}>{opt.label}</Text>
+                  </Pressable>
                 );
               })}
             </View>
@@ -363,7 +331,6 @@ const styles = StyleSheet.create({
   pillTextActive: { color: 'white' },
   advancedBtn: { width: '100%', borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', borderRadius: 16, paddingVertical: 12, alignItems: 'center', backgroundColor: 'rgba(21,92,51,0.08)' },
   recurrenceRow: { flexDirection: 'row', gap: 8 },
-  recurrenceBtnWrap: { flex: 1 },
   recurrenceBtn: { flex: 1, minHeight: 48, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(21,92,51,0.18)', backgroundColor: 'rgba(21,92,51,0.08)', alignItems: 'center', justifyContent: 'center' },
   recurrenceBtnActive: { backgroundColor: '#16a34a', borderColor: '#16a34a' },
   recurrenceBtnText: { color: '#145c33', fontWeight: '700', fontSize: 14 },

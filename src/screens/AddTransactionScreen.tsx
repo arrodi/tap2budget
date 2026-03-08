@@ -65,6 +65,19 @@ export function AddTransactionScreen({
   }
 
 
+  const formatAmountFromDigits = (raw: string) => {
+    const digits = raw.replace(/\D/g, '');
+    if (!digits.length) return '';
+    const cents = Number(digits);
+    const whole = Math.floor(cents / 100);
+    const fraction = String(cents % 100).padStart(2, '0');
+    return `${whole}.${fraction}`;
+  };
+
+  const handleAmountChange = (text: string) => {
+    onChangeAmount(formatAmountFromDigits(text));
+  };
+
   const onPressSave = async () => {
     if (isSaving) return;
 
@@ -112,7 +125,7 @@ export function AddTransactionScreen({
         <TextInput
           ref={amountInputRef}
           value={amountInput}
-          onChangeText={onChangeAmount}
+          onChangeText={handleAmountChange}
           keyboardType="decimal-pad"
           returnKeyType="done"
           blurOnSubmit

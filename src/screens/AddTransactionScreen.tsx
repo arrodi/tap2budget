@@ -52,7 +52,6 @@ export function AddTransactionScreen({
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [categoryChosen, setCategoryChosen] = useState(false);
   const [saveDone, setSaveDone] = useState(false);
-  const [useCustomDate, setUseCustomDate] = useState(false);
   const [customDateInput, setCustomDateInput] = useState('');
   const amountInputRef = useRef<TextInput>(null);
   const amountAccessoryId = 'amountKeyboardAccessory';
@@ -105,7 +104,7 @@ export function AddTransactionScreen({
     }
 
     let dateIso: string | undefined;
-    if (useCustomDate && customDateInput.trim()) {
+    if (customDateInput.trim()) {
       const parsed = new Date(customDateInput.trim());
       if (Number.isNaN(parsed.getTime())) {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
@@ -216,31 +215,25 @@ export function AddTransactionScreen({
               ] as const).map((opt) => {
                 const selected = freq === opt.key;
                 return (
-                  <Pressable key={opt.key} style={[styles.recurrenceBtn, selected && styles.recurrenceBtnActive]} onPress={() => setFreq(opt.key)}>
+                  <Pressable
+                    key={opt.key}
+                    style={[styles.recurrenceBtn, selected && styles.recurrenceBtnActive]}
+                    onPress={() => setFreq((prev) => (prev === opt.key ? 'none' : opt.key))}
+                  >
                     <Text style={[styles.recurrenceBtnText, selected && styles.recurrenceBtnTextActive]}>{opt.label}</Text>
                   </Pressable>
                 );
               })}
             </View>
 
-            <Pressable
-              style={[styles.advancedBtn, darkMode && styles.rowDark]}
-              onPress={() => setUseCustomDate((v) => !v)}
-            >
-              <Text style={[styles.advancedText, darkMode && styles.textDark]}>
-                {useCustomDate ? 'Use custom date/time: ON' : 'Use custom date/time'}
-              </Text>
-            </Pressable>
-
-            {useCustomDate ? (
-              <TextInput
-                value={customDateInput}
-                onChangeText={setCustomDateInput}
-                placeholder="YYYY-MM-DD HH:mm"
-                placeholderTextColor={darkMode ? '#86a893' : '#3e5f47'}
-                style={[styles.input, darkMode && styles.inputDark]}
-              />
-            ) : null}
+            <Text style={[styles.advancedText, darkMode && styles.textDark]}>Custom date/time (optional)</Text>
+            <TextInput
+              value={customDateInput}
+              onChangeText={setCustomDateInput}
+              placeholder="YYYY-MM-DD HH:mm"
+              placeholderTextColor={darkMode ? '#86a893' : '#3e5f47'}
+              style={[styles.input, darkMode && styles.inputDark]}
+            />
           </>
         ) : null}
 
@@ -340,9 +333,9 @@ const styles = StyleSheet.create({
   advancedBtn: { width: '100%', borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', borderRadius: 16, paddingVertical: 12, alignItems: 'center', backgroundColor: 'rgba(21,92,51,0.08)' },
   recurrenceRow: { flexDirection: 'row', gap: 8 },
   recurrenceBtn: { flex: 1, minHeight: 48, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(21,92,51,0.18)', backgroundColor: 'rgba(21,92,51,0.08)', alignItems: 'center', justifyContent: 'center' },
-  recurrenceBtnActive: { backgroundColor: 'rgba(21,92,51,0.2)', borderColor: 'rgba(21,92,51,0.3)' },
+  recurrenceBtnActive: { backgroundColor: '#16a34a', borderColor: '#16a34a' },
   recurrenceBtnText: { color: '#145c33', fontWeight: '700', fontSize: 14 },
-  recurrenceBtnTextActive: { color: '#12492b' },
+  recurrenceBtnTextActive: { color: '#ffffff' },
   advancedText: { color: '#166534', fontWeight: '700' },
   advancedHintWrap: { alignItems: 'center', justifyContent: 'center', paddingTop: 4, paddingBottom: 2 },
   advancedHint: { color: '#6f8f78', fontSize: 12, fontWeight: '500' },

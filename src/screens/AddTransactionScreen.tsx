@@ -48,7 +48,6 @@ export function AddTransactionScreen({
   const [isSaving, setIsSaving] = useState(false);
   const [advanced, setAdvanced] = useState(false);
   const [freq, setFreq] = useState<'none' | 'weekly' | 'monthly'>('none');
-  const [typeModalOpen, setTypeModalOpen] = useState(false);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [recurrenceModalOpen, setRecurrenceModalOpen] = useState(false);
   const [categoryChosen, setCategoryChosen] = useState(false);
@@ -148,16 +147,20 @@ export function AddTransactionScreen({
           ]}
         />
 
-        <Pressable
-          style={[
-            styles.categoryButton,
-            selectedType === 'income' ? styles.typeButtonIncome : styles.typeButtonExpense,
-            darkMode && styles.rowDark,
-          ]}
-          onPress={() => setTypeModalOpen(true)}
-        >
-          <Text style={styles.typeButtonValue}>{selectedType === 'income' ? 'Income' : 'Expense'}</Text>
-        </Pressable>
+        <View style={[styles.typeSwitchWrap, darkMode && styles.rowDark]}>
+          <Pressable
+            style={[styles.typeSwitchOption, selectedType === 'expense' && styles.typeSwitchOptionActive]}
+            onPress={() => onChangeType('expense')}
+          >
+            <Text style={[styles.typeSwitchText, selectedType === 'expense' && styles.typeSwitchTextActive]}>Expense</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.typeSwitchOption, selectedType === 'income' && styles.typeSwitchOptionActive]}
+            onPress={() => onChangeType('income')}
+          >
+            <Text style={[styles.typeSwitchText, selectedType === 'income' && styles.typeSwitchTextActive]}>Income</Text>
+          </Pressable>
+        </View>
 
         <Pressable style={[styles.categoryButton, darkMode && styles.rowDark]} onPress={() => setCategoryModalOpen(true)}>
           <Text style={[styles.categoryButtonValue, darkMode && styles.textDark]}>{categoryChosen ? selectedCategory : 'Category'}</Text>
@@ -224,24 +227,6 @@ export function AddTransactionScreen({
         </Pressable>
       </View>
       </View>
-
-      <Modal visible={typeModalOpen} animationType="fade" transparent onRequestClose={() => setTypeModalOpen(false)}>
-        <Pressable style={styles.modalBackdrop} onPress={() => setTypeModalOpen(false)}>
-          <Pressable style={[styles.modalCard, darkMode && styles.formAreaDark]} onPress={() => {}}>
-            <Text style={[styles.modalTitle, darkMode && styles.textDark]}>Select type</Text>
-            <View style={styles.typeTileWrap}>
-              {(['expense', 'income'] as const).map((type) => {
-                const selected = type === selectedType;
-                return (
-                  <Pressable key={type} style={[styles.typeTile, selected && styles.categoryTileSelected]} onPress={() => { onChangeType(type); setTypeModalOpen(false); }}>
-                    <Text style={[styles.categoryTileText, selected && styles.categoryTileTextSelected]}>{type === 'income' ? 'Income' : 'Expense'}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
 
       <Modal visible={recurrenceModalOpen} animationType="fade" transparent onRequestClose={() => setRecurrenceModalOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setRecurrenceModalOpen(false)}>
@@ -310,9 +295,11 @@ const styles = StyleSheet.create({
   rowDark: { backgroundColor: 'rgba(0,0,0,0.14)' },
   label: { color: '#166534', fontWeight: '700', fontSize: 16 },
   categoryButton: { minHeight: 56, width: '100%', borderRadius: 18, borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', backgroundColor: 'rgba(21,92,51,0.08)', paddingHorizontal: 16, alignItems: 'center', justifyContent: 'center' },
-  typeButtonIncome: { backgroundColor: 'rgba(21,92,51,0.10)', borderColor: 'rgba(21,92,51,0.14)' },
-  typeButtonExpense: { backgroundColor: 'rgba(21,92,51,0.10)', borderColor: 'rgba(21,92,51,0.14)' },
-  typeButtonValue: { color: '#145c33', fontWeight: '800', fontSize: 18, textAlign: 'center' },
+  typeSwitchWrap: { width: '100%', minHeight: 56, borderRadius: 16, backgroundColor: 'rgba(21,92,51,0.08)', borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', padding: 4, flexDirection: 'row', gap: 6 },
+  typeSwitchOption: { flex: 1, borderRadius: 12, justifyContent: 'center', alignItems: 'center', paddingVertical: 10 },
+  typeSwitchOptionActive: { backgroundColor: 'rgba(21,92,51,0.18)' },
+  typeSwitchText: { color: '#4f6d5b', fontWeight: '700', fontSize: 16 },
+  typeSwitchTextActive: { color: '#145c33' },
   categoryButtonValue: { color: '#12492b', fontWeight: '700', fontSize: 18, textAlign: 'center' },
   rowGap: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   pill: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 999, borderWidth: 1, borderColor: '#a9e6b7', backgroundColor: '#e6f4ea' },

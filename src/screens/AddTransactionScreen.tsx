@@ -120,7 +120,7 @@ export function AddTransactionScreen({
   };
 
   return (
-    <View style={styles.screenContainer}>
+    <View style={[styles.screenContainer, darkMode && styles.screenContainerDark]}>
       <Text style={[styles.screenTitle, darkMode && styles.textDark]}>Transact!</Text>
       <View style={styles.contentWrap}>
       <View style={[styles.formArea, darkMode && styles.formAreaDark]}>
@@ -293,36 +293,37 @@ export function AddTransactionScreen({
 }
 
 const styles = StyleSheet.create({
-  screenContainer: { flex: 1, paddingHorizontal: 0, paddingTop: 18, justifyContent: 'flex-start', alignItems: 'stretch' },
+  screenContainer: { flex: 1, paddingHorizontal: 16, paddingTop: 14, justifyContent: 'flex-start', alignItems: 'stretch', backgroundColor: '#f4faf5' },
+  screenContainerDark: { backgroundColor: '#0f1a14' },
   contentWrap: { flex: 1, width: '100%', justifyContent: 'center' },
-  formArea: { width: '100%', backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0, paddingHorizontal: 0, paddingVertical: 8, gap: 10 },
+  formArea: { width: '100%', backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0, paddingHorizontal: 0, paddingVertical: 8, gap: 12 },
   formAreaDark: { backgroundColor: 'transparent', borderColor: 'transparent' },
-  screenTitle: { width: '100%', textAlign: 'center', fontSize: 38, fontWeight: '900', color: '#166534', letterSpacing: 0.4, marginBottom: 18 },
+  screenTitle: { width: '100%', textAlign: 'center', fontSize: 32, fontWeight: '800', color: '#155c33', letterSpacing: 0.2, marginBottom: 12 },
   sectionTitle: { fontSize: 44, fontWeight: '900', color: '#166534', letterSpacing: 0.4 },
   textDark: { color: '#d6f5df' },
-  amountInput: { backgroundColor: 'transparent', borderWidth: 0, color: '#0f5a36', borderRadius: 0, paddingHorizontal: 0, paddingVertical: 4, fontSize: 36, fontWeight: '700', textAlign: 'center' },
+  amountInput: { backgroundColor: 'transparent', borderWidth: 0, color: '#0f5a36', borderRadius: 0, paddingHorizontal: 0, paddingVertical: 8, fontSize: 52, fontWeight: '800', textAlign: 'center', letterSpacing: 0.5 },
   amountIncome: { color: '#0f8d45' },
-  amountExpense: { color: '#c92a2a' },
+  amountExpense: { color: '#d12f2f' },
   amountInputDark: { color: '#d6f5df' },
-  input: { backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#8fdf8e', color: '#0f5a36', borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, fontSize: 18, fontWeight: '600' },
-  inputDark: { backgroundColor: '#08170f', borderColor: '#26523a', color: '#d6f5df' },
+  input: { backgroundColor: 'rgba(255,255,255,0.78)', borderWidth: 1, borderColor: 'rgba(24,94,52,0.16)', color: '#0f5a36', borderRadius: 16, paddingHorizontal: 16, paddingVertical: 13, fontSize: 18, fontWeight: '600' },
+  inputDark: { backgroundColor: 'rgba(9,24,16,0.7)', borderColor: '#26523a', color: '#d6f5df' },
   rowDark: { backgroundColor: 'rgba(0,0,0,0.24)' },
   label: { color: '#166534', fontWeight: '700', fontSize: 16 },
-  categoryButton: { minHeight: 54, width: '100%', borderRadius: 0, borderWidth: 0, backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, alignItems: 'center', justifyContent: 'center' },
-  typeButtonIncome: { backgroundColor: '#15a34a' },
-  typeButtonExpense: { backgroundColor: '#dc2626' },
+  categoryButton: { minHeight: 56, width: '100%', borderRadius: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.25)', backgroundColor: 'rgba(255,255,255,0.28)', paddingHorizontal: 16, alignItems: 'center', justifyContent: 'center' },
+  typeButtonIncome: { backgroundColor: '#15a34a', borderColor: '#15803d' },
+  typeButtonExpense: { backgroundColor: '#dc2626', borderColor: '#b91c1c' },
   typeButtonValue: { color: '#ffffff', fontWeight: '800', fontSize: 18, textAlign: 'center' },
-  categoryButtonValue: { color: '#14532d', fontWeight: '700', fontSize: 18, textAlign: 'center' },
+  categoryButtonValue: { color: '#12492b', fontWeight: '700', fontSize: 18, textAlign: 'center' },
   rowGap: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   pill: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 999, borderWidth: 1, borderColor: '#a9e6b7', backgroundColor: '#e6f4ea' },
   pillActive: { backgroundColor: '#14b85a', borderColor: '#14b85a' },
   pillText: { color: '#1e6e37', fontWeight: '600' },
   pillTextActive: { color: 'white' },
-  advancedBtn: { width: '100%', borderWidth: 0, borderRadius: 0, paddingVertical: 12, alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.15)' },
+  advancedBtn: { width: '100%', borderWidth: 1, borderColor: 'rgba(24,94,52,0.14)', borderRadius: 16, paddingVertical: 12, alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.22)' },
   advancedText: { color: '#166534', fontWeight: '700' },
-  advancedHintWrap: { alignItems: 'center', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 },
+  advancedHintWrap: { alignItems: 'center', justifyContent: 'center', paddingTop: 4, paddingBottom: 2 },
   advancedHint: { color: '#6f8f78', fontSize: 12, fontWeight: '500' },
-  saveBtn: { marginTop: 'auto', width: '100%', borderWidth: 0, borderRadius: 0, paddingVertical: 16, alignItems: 'center' },
+  saveBtn: { marginTop: 'auto', width: '100%', borderWidth: 0, borderRadius: 18, paddingVertical: 16, alignItems: 'center' },
   saveBtnIncome: { backgroundColor: '#0f8d45' },
   saveBtnExpense: { backgroundColor: '#c92a2a' },
   saveBtnDone: { backgroundColor: '#0c6e36' },

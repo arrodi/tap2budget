@@ -105,13 +105,7 @@ export function AddTransactionScreen({
   };
 
   return (
-    <View
-      style={[
-        styles.screenContainer,
-        selectedType === 'income' ? styles.screenIncome : styles.screenExpense,
-        darkMode && (selectedType === 'income' ? styles.screenIncomeDark : styles.screenExpenseDark),
-      ]}
-    >
+    <View style={styles.screenContainer}>
       <Text style={[styles.screenTitle, darkMode && styles.textDark]}>Transact!</Text>
       <View style={styles.contentWrap}>
       <View style={[styles.formArea, darkMode && styles.formAreaDark]}>
@@ -126,13 +120,22 @@ export function AddTransactionScreen({
           inputAccessoryViewID={Platform.OS === 'ios' ? amountAccessoryId : undefined}
           placeholder="$0.00"
           placeholderTextColor={darkMode ? '#86a893' : '#3e5f47'}
-          style={[styles.amountInput, darkMode && styles.amountInputDark]}
+          style={[
+            styles.amountInput,
+            selectedType === 'income' ? styles.amountIncome : styles.amountExpense,
+            darkMode && styles.amountInputDark,
+          ]}
         />
 
-        <Pressable style={[styles.categoryButton, darkMode && styles.rowDark]} onPress={() => setTypeModalOpen(true)}>
-          <Text style={[styles.categoryButtonValue, darkMode && styles.textDark]}>
-            {selectedType === 'income' ? 'Income' : 'Expense'}
-          </Text>
+        <Pressable
+          style={[
+            styles.categoryButton,
+            selectedType === 'income' ? styles.typeButtonIncome : styles.typeButtonExpense,
+            darkMode && styles.rowDark,
+          ]}
+          onPress={() => setTypeModalOpen(true)}
+        >
+          <Text style={styles.typeButtonValue}>{selectedType === 'income' ? 'Income' : 'Expense'}</Text>
         </Pressable>
 
         <Pressable style={[styles.categoryButton, darkMode && styles.rowDark]} onPress={() => setCategoryModalOpen(true)}>
@@ -176,7 +179,16 @@ export function AddTransactionScreen({
           </>
         ) : null}
 
-        <Pressable disabled={isSaving} style={[styles.saveBtn, saveDone && styles.saveBtnDone, isSaving && styles.saveBtnDisabled]} onPress={onPressSave}>
+        <Pressable
+          disabled={isSaving}
+          style={[
+            styles.saveBtn,
+            selectedType === 'income' ? styles.saveBtnIncome : styles.saveBtnExpense,
+            saveDone && styles.saveBtnDone,
+            isSaving && styles.saveBtnDisabled,
+          ]}
+          onPress={onPressSave}
+        >
           <Text style={styles.saveBtnText}>{isSaving ? 'Saving…' : saveDone ? 'Saved ✓' : 'Save transaction'}</Text>
         </Pressable>
 
@@ -261,10 +273,6 @@ export function AddTransactionScreen({
 
 const styles = StyleSheet.create({
   screenContainer: { flex: 1, paddingHorizontal: 0, paddingTop: 18, justifyContent: 'flex-start', alignItems: 'stretch' },
-  screenIncome: { backgroundColor: '#dff9e4' },
-  screenExpense: { backgroundColor: '#fde2e2' },
-  screenIncomeDark: { backgroundColor: '#0f2b18' },
-  screenExpenseDark: { backgroundColor: '#2f1111' },
   contentWrap: { flex: 1, width: '100%', justifyContent: 'center' },
   formArea: { width: '100%', backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0, paddingHorizontal: 0, paddingVertical: 8, gap: 10 },
   formAreaDark: { backgroundColor: 'transparent', borderColor: 'transparent' },
@@ -272,12 +280,17 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 44, fontWeight: '900', color: '#166534', letterSpacing: 0.4 },
   textDark: { color: '#d6f5df' },
   amountInput: { backgroundColor: 'transparent', borderWidth: 0, color: '#0f5a36', borderRadius: 0, paddingHorizontal: 0, paddingVertical: 4, fontSize: 36, fontWeight: '700', textAlign: 'center' },
+  amountIncome: { color: '#0f8d45' },
+  amountExpense: { color: '#c92a2a' },
   amountInputDark: { color: '#d6f5df' },
   input: { backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#8fdf8e', color: '#0f5a36', borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, fontSize: 18, fontWeight: '600' },
   inputDark: { backgroundColor: '#08170f', borderColor: '#26523a', color: '#d6f5df' },
   rowDark: { backgroundColor: 'rgba(0,0,0,0.24)' },
   label: { color: '#166534', fontWeight: '700', fontSize: 16 },
   categoryButton: { minHeight: 54, width: '100%', borderRadius: 0, borderWidth: 0, backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, alignItems: 'center', justifyContent: 'center' },
+  typeButtonIncome: { backgroundColor: '#15a34a' },
+  typeButtonExpense: { backgroundColor: '#dc2626' },
+  typeButtonValue: { color: '#ffffff', fontWeight: '800', fontSize: 18, textAlign: 'center' },
   categoryButtonValue: { color: '#14532d', fontWeight: '700', fontSize: 18, textAlign: 'center' },
   rowGap: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
   pill: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 999, borderWidth: 1, borderColor: '#a9e6b7', backgroundColor: '#e6f4ea' },
@@ -288,8 +301,10 @@ const styles = StyleSheet.create({
   advancedText: { color: '#166534', fontWeight: '700' },
   advancedHintWrap: { alignItems: 'center', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 },
   advancedHint: { color: '#6f8f78', fontSize: 12, fontWeight: '500' },
-  saveBtn: { marginTop: 'auto', width: '100%', backgroundColor: 'rgba(0,0,0,0.18)', borderWidth: 0, borderRadius: 0, paddingVertical: 16, alignItems: 'center' },
-  saveBtnDone: { backgroundColor: '#0f8d45', borderColor: '#0c6e36' },
+  saveBtn: { marginTop: 'auto', width: '100%', borderWidth: 0, borderRadius: 0, paddingVertical: 16, alignItems: 'center' },
+  saveBtnIncome: { backgroundColor: '#0f8d45' },
+  saveBtnExpense: { backgroundColor: '#c92a2a' },
+  saveBtnDone: { backgroundColor: '#0c6e36' },
   saveBtnDisabled: { opacity: 0.7 },
   saveBtnText: { color: 'white', fontWeight: '800', fontSize: 18 },
   modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', alignItems: 'center', justifyContent: 'center', padding: 20 },

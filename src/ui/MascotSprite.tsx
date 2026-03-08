@@ -19,6 +19,6 @@ export function MascotSprite({ variant, width = 130 }: { variant: MascotVariant;
 }
 
 const styles = StyleSheet.create({
-  frame: { overflow: 'hidden' },
-  image: { width: '100%', height: '100%' },
+  frame: { overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
+  image: { width: '88%', height: '88%' },
 });

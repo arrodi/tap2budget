@@ -43,14 +43,13 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
 
   const fadeSolid = darkMode ? 'rgba(15,26,20,1)' : 'rgba(234,255,239,1)';
   const fadeTransparent = darkMode ? 'rgba(15,26,20,0)' : 'rgba(234,255,239,0)';
-  const hasExceededBudget = budgetProgressRows.some((row) => row.usagePct > 100);
 
   return (
     <View style={[styles.screenContainer, darkMode && styles.screenDark]}>
       <View style={styles.contentContainer}>
 
         <View style={styles.mascotWrap}>
-          <MascotSprite variant={hasExceededBudget ? 'worried' : 'happy'} width={120} />
+          <MascotSprite variant="happy" width={120} />
         </View>
 
         <View style={styles.overviewRowHorizontal}>

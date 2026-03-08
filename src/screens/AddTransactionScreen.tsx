@@ -78,6 +78,8 @@ export function AddTransactionScreen({
     onChangeAmount(formatAmountFromDigits(text));
   };
 
+  const amountDisplay = `$${amountInput || '0.00'}`;
+
   const onPressSave = async () => {
     if (isSaving) return;
 
@@ -124,14 +126,19 @@ export function AddTransactionScreen({
       <View style={[styles.formArea, darkMode && styles.formAreaDark]}>
         <TextInput
           ref={amountInputRef}
-          value={amountInput}
+          value={amountDisplay}
           onChangeText={handleAmountChange}
           keyboardType="decimal-pad"
           returnKeyType="done"
           blurOnSubmit
           onSubmitEditing={() => Keyboard.dismiss()}
+          onFocus={() => {
+            const at = amountDisplay.length;
+            amountInputRef.current?.setNativeProps({ selection: { start: at, end: at } });
+          }}
+          selection={{ start: amountDisplay.length, end: amountDisplay.length }}
           inputAccessoryViewID={Platform.OS === 'ios' ? amountAccessoryId : undefined}
-          placeholder="$0.00"
+          placeholder=""
           placeholderTextColor={darkMode ? '#86a893' : '#3e5f47'}
           style={[
             styles.amountInput,

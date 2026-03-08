@@ -89,6 +89,7 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
 
           return (
             <View style={styles.expenseChartWrap}>
+              <View style={styles.chartWithMascot}>
               <Svg width={size + 220} height={size + 80}>
                 <G x={110} y={30}>
                   <G rotation={-90} origin={`${size/2}, ${size/2}`}>
@@ -122,6 +123,10 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
                   })}
                 </G>
               </Svg>
+              <View pointerEvents="none" style={styles.chartMascotWrap}>
+                <MascotSprite variant="happy" width={54} />
+              </View>
+              </View>
             </View>
           );
         })()}
@@ -255,6 +260,8 @@ const styles = StyleSheet.create({
 
   panel: { backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#a7e6b4', borderRadius: 12, padding: 10, gap: 8, marginTop: 8 },
   expenseChartWrap: { alignItems: 'center', justifyContent: 'center', paddingVertical: 8 },
+  chartWithMascot: { position: 'relative' },
+  chartMascotWrap: { position: 'absolute', left: '50%', top: '50%', transform: [{ translateX: -27 }, { translateY: -27 }] },
   totalBudgetText: { color: '#0f5a36', fontWeight: '800', marginTop: 6 },
   panelDark: { backgroundColor: '#102117', borderColor: '#26523a' },
   input: { backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#8fdf8e', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 10, color: '#156530' },

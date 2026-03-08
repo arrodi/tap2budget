@@ -113,6 +113,7 @@ export function AddTransactionScreen({
       ]}
     >
       <Text style={[styles.screenTitle, darkMode && styles.textDark]}>Transact!</Text>
+      <View style={styles.contentWrap}>
       <View style={[styles.formArea, darkMode && styles.formAreaDark]}>
         <TextInput
           ref={amountInputRef}
@@ -189,6 +190,7 @@ export function AddTransactionScreen({
           <Text style={styles.advancedHint}>{advanced ? 'hide advanced options' : 'advanced options'}</Text>
         </Pressable>
       </View>
+      </View>
 
       <Modal visible={typeModalOpen} animationType="fade" transparent onRequestClose={() => setTypeModalOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setTypeModalOpen(false)}>
@@ -263,6 +265,7 @@ const styles = StyleSheet.create({
   screenExpense: { backgroundColor: '#fde2e2' },
   screenIncomeDark: { backgroundColor: '#0f2b18' },
   screenExpenseDark: { backgroundColor: '#2f1111' },
+  contentWrap: { flex: 1, width: '100%', justifyContent: 'center' },
   formArea: { width: '100%', backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0, paddingHorizontal: 0, paddingVertical: 8, gap: 10 },
   formAreaDark: { backgroundColor: 'transparent', borderColor: 'transparent' },
   screenTitle: { width: '100%', textAlign: 'center', fontSize: 38, fontWeight: '900', color: '#166534', letterSpacing: 0.4, marginBottom: 18 },

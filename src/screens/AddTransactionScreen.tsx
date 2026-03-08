@@ -7,7 +7,6 @@ import {
   Modal,
   Platform,
   Pressable,
-  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -107,12 +106,6 @@ export function AddTransactionScreen({
 
   return (
     <View style={styles.screenContainer}>
-      <View style={styles.heroWrap}>
-        <View style={styles.wordmarkCrop}>
-          <Image source={require('../../assets/tap2budget-wordmark.png')} style={styles.wordmarkImage} resizeMode="contain" />
-        </View>
-      </View>
-
       <View style={[styles.formArea, darkMode && styles.formAreaDark]}>
         <TextInput
           ref={amountInputRef}
@@ -125,7 +118,7 @@ export function AddTransactionScreen({
           inputAccessoryViewID={Platform.OS === 'ios' ? amountAccessoryId : undefined}
           placeholder="Amount"
           placeholderTextColor={darkMode ? '#86a893' : '#3e5f47'}
-          style={[styles.input, darkMode && styles.inputDark]}
+          style={[styles.amountInput, darkMode && styles.amountInputDark]}
         />
 
         <Pressable style={[styles.categoryButton, darkMode && styles.inputDark]} onPress={() => setTypeModalOpen(true)}>
@@ -259,13 +252,12 @@ export function AddTransactionScreen({
 
 const styles = StyleSheet.create({
   screenContainer: { flex: 1, paddingHorizontal: 14, justifyContent: 'center', alignItems: 'center' },
-  heroWrap: { width: '100%', maxWidth: 520, height: 132, alignItems: 'center', justifyContent: 'center' },
-  wordmarkCrop: { width: '100%', maxWidth: 500, height: 120, overflow: 'hidden', borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
-  wordmarkImage: { width: '100%', maxWidth: 500, height: 120 },
   formArea: { width: '100%', maxWidth: 520, backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#a7e6b4', borderRadius: 18, padding: 16, gap: 14 },
   formAreaDark: { backgroundColor: '#102117', borderColor: '#26523a' },
   sectionTitle: { fontSize: 44, fontWeight: '900', color: '#166534', letterSpacing: 0.4 },
   textDark: { color: '#d6f5df' },
+  amountInput: { backgroundColor: 'transparent', borderWidth: 0, color: '#0f5a36', borderRadius: 0, paddingHorizontal: 0, paddingVertical: 4, fontSize: 36, fontWeight: '700', textAlign: 'center' },
+  amountInputDark: { color: '#d6f5df' },
   input: { backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#8fdf8e', color: '#0f5a36', borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, fontSize: 18, fontWeight: '600' },
   inputDark: { backgroundColor: '#08170f', borderColor: '#26523a', color: '#d6f5df' },
   label: { color: '#166534', fontWeight: '700', fontSize: 16 },

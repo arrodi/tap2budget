@@ -137,6 +137,7 @@ export function AddTransactionScreen({
             amountInputRef.current?.setNativeProps({ selection: { start: at, end: at } });
           }}
           selection={{ start: amountDisplay.length, end: amountDisplay.length }}
+          caretHidden
           inputAccessoryViewID={Platform.OS === 'ios' ? amountAccessoryId : undefined}
           placeholder=""
           placeholderTextColor={darkMode ? '#86a893' : '#3e5f47'}

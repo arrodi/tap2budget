@@ -106,6 +106,7 @@ export function AddTransactionScreen({
 
   return (
     <View style={styles.screenContainer}>
+      <Text style={[styles.screenTitle, darkMode && styles.textDark]}>Transact!</Text>
       <View style={[styles.formArea, darkMode && styles.formAreaDark]}>
         <TextInput
           ref={amountInputRef}
@@ -254,6 +255,7 @@ const styles = StyleSheet.create({
   screenContainer: { flex: 1, paddingHorizontal: 14, justifyContent: 'center', alignItems: 'center' },
   formArea: { width: '100%', maxWidth: 520, backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#a7e6b4', borderRadius: 18, padding: 16, gap: 14 },
   formAreaDark: { backgroundColor: '#102117', borderColor: '#26523a' },
+  screenTitle: { width: '100%', maxWidth: 520, fontSize: 38, fontWeight: '900', color: '#166534', letterSpacing: 0.4, marginBottom: 10 },
   sectionTitle: { fontSize: 44, fontWeight: '900', color: '#166534', letterSpacing: 0.4 },
   textDark: { color: '#d6f5df' },
   amountInput: { backgroundColor: 'transparent', borderWidth: 0, color: '#0f5a36', borderRadius: 0, paddingHorizontal: 0, paddingVertical: 4, fontSize: 36, fontWeight: '700', textAlign: 'center' },

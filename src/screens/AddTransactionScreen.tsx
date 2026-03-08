@@ -226,7 +226,6 @@ export function AddTransactionScreen({
               })}
             </View>
 
-            <Text style={[styles.advancedText, darkMode && styles.textDark]}>Custom date/time (optional)</Text>
             <TextInput
               value={customDateInput}
               onChangeText={setCustomDateInput}

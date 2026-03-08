@@ -300,7 +300,7 @@ export function AddTransactionScreen({
 }
 
 const styles = StyleSheet.create({
-  screenContainer: { flex: 1, paddingHorizontal: 16, paddingTop: 14, justifyContent: 'flex-start', alignItems: 'stretch', backgroundColor: '#f4faf5' },
+  screenContainer: { flex: 1, paddingHorizontal: 16, paddingTop: 14, justifyContent: 'flex-start', alignItems: 'stretch', backgroundColor: '#f0fbf3' },
   screenContainerDark: { backgroundColor: '#0f1a14' },
   contentWrap: { flex: 1, width: '100%', justifyContent: 'center' },
   formArea: { width: '100%', backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0, paddingHorizontal: 0, paddingVertical: 8, gap: 12 },

@@ -269,7 +269,7 @@ export function TransactionsScreen(props: Props) {
 }
 
 const styles = StyleSheet.create({
-  screenContainer: { flex: 1 },
+  screenContainer: { flex: 1, backgroundColor: '#f0fbf3' },
   screenDark: { backgroundColor: colors.screenDark },
   panelDark: { backgroundColor: colors.panelDark, borderColor: colors.borderDark },
   contentContainer: { paddingHorizontal: spacing.xl, gap: spacing.md, paddingTop: 8, paddingBottom: 88 },

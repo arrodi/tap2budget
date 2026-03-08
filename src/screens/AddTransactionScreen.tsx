@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   InputAccessoryView,
@@ -12,6 +12,7 @@ import {
   TextInput,
   UIManager,
   View,
+  Animated,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { TransactionCategory, TransactionType } from '../domain/types';
@@ -56,6 +57,8 @@ export function AddTransactionScreen({
   const [customDateInput, setCustomDateInput] = useState('');
   const amountInputRef = useRef<TextInput>(null);
   const amountAccessoryId = 'amountKeyboardAccessory';
+  const [switchWidth, setSwitchWidth] = useState(0);
+  const typeAnim = useRef(new Animated.Value(selectedType === 'income' ? 1 : 0)).current;
 
 
 
@@ -78,6 +81,19 @@ export function AddTransactionScreen({
   };
 
   const amountDisplay = `$${amountInput || '0.00'}`;
+
+  useEffect(() => {
+    Animated.spring(typeAnim, {
+      toValue: selectedType === 'income' ? 1 : 0,
+      useNativeDriver: true,
+      friction: 8,
+      tension: 90,
+    }).start();
+  }, [selectedType, typeAnim]);
+
+  const onToggleType = () => {
+    onChangeType(selectedType === 'income' ? 'expense' : 'income');
+  };
 
   const onPressSave = async () => {
     if (isSaving) return;
@@ -147,20 +163,37 @@ export function AddTransactionScreen({
           ]}
         />
 
-        <View style={[styles.typeSwitchWrap, darkMode && styles.rowDark]}>
-          <Pressable
-            style={[styles.typeSwitchOption, selectedType === 'expense' && styles.typeSwitchOptionActive]}
-            onPress={() => onChangeType('expense')}
-          >
-            <Text style={[styles.typeSwitchText, selectedType === 'expense' && styles.typeSwitchTextActive]}>Expense</Text>
-          </Pressable>
-          <Pressable
-            style={[styles.typeSwitchOption, selectedType === 'income' && styles.typeSwitchOptionActive]}
-            onPress={() => onChangeType('income')}
-          >
-            <Text style={[styles.typeSwitchText, selectedType === 'income' && styles.typeSwitchTextActive]}>Income</Text>
-          </Pressable>
-        </View>
+        <Pressable
+          style={[styles.typeSwitchWrap, darkMode && styles.rowDark]}
+          onLayout={(e) => setSwitchWidth(e.nativeEvent.layout.width)}
+          onPress={onToggleType}
+        >
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.typeSwitchThumb,
+              {
+                width: Math.max(0, (switchWidth - 14) / 2),
+                transform: [
+                  {
+                    translateX: typeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, Math.max(0, (switchWidth - 14) / 2 + 6)],
+                    }),
+                  },
+                ],
+              },
+            ]}
+          />
+          <View style={styles.typeSwitchLabels}>
+            <View style={styles.typeSwitchOption}>
+              <Text style={[styles.typeSwitchText, selectedType === 'expense' && styles.typeSwitchTextActive]}>Expense</Text>
+            </View>
+            <View style={styles.typeSwitchOption}>
+              <Text style={[styles.typeSwitchText, selectedType === 'income' && styles.typeSwitchTextActive]}>Income</Text>
+            </View>
+          </View>
+        </Pressable>
 
         <Pressable style={[styles.categoryButton, darkMode && styles.rowDark]} onPress={() => setCategoryModalOpen(true)}>
           <Text style={[styles.categoryButtonValue, darkMode && styles.textDark]}>{categoryChosen ? selectedCategory : 'Category'}</Text>
@@ -295,9 +328,10 @@ const styles = StyleSheet.create({
   rowDark: { backgroundColor: 'rgba(0,0,0,0.14)' },
   label: { color: '#166534', fontWeight: '700', fontSize: 16 },
   categoryButton: { minHeight: 56, width: '100%', borderRadius: 18, borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', backgroundColor: 'rgba(21,92,51,0.08)', paddingHorizontal: 16, alignItems: 'center', justifyContent: 'center' },
-  typeSwitchWrap: { width: '100%', minHeight: 56, borderRadius: 16, backgroundColor: 'rgba(21,92,51,0.08)', borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', padding: 4, flexDirection: 'row', gap: 6 },
+  typeSwitchWrap: { width: '100%', minHeight: 56, borderRadius: 16, backgroundColor: 'rgba(21,92,51,0.08)', borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', padding: 4, position: 'relative', overflow: 'hidden' },
+  typeSwitchThumb: { position: 'absolute', left: 4, top: 4, bottom: 4, borderRadius: 12, backgroundColor: 'rgba(21,92,51,0.20)' },
+  typeSwitchLabels: { flexDirection: 'row', gap: 6 },
   typeSwitchOption: { flex: 1, borderRadius: 12, justifyContent: 'center', alignItems: 'center', paddingVertical: 10 },
-  typeSwitchOptionActive: { backgroundColor: 'rgba(21,92,51,0.18)' },
   typeSwitchText: { color: '#4f6d5b', fontWeight: '700', fontSize: 16 },
   typeSwitchTextActive: { color: '#145c33' },
   categoryButtonValue: { color: '#12492b', fontWeight: '700', fontSize: 18, textAlign: 'center' },

@@ -48,10 +48,6 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
     <View style={[styles.screenContainer, darkMode && styles.screenDark]}>
       <View style={styles.contentContainer}>
 
-        <View style={styles.mascotWrap}>
-          <MascotSprite variant="happy" width={120} />
-        </View>
-
         <View style={styles.overviewRowHorizontal}>
           <View style={[styles.card, styles.cardHorizontal, darkMode && styles.cardDark]}>
             <Text style={[styles.cardLabel, darkMode && styles.textDark]}>Income</Text>
@@ -74,6 +70,12 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
           const entries = [...byCat.entries()].sort((a, b) => b[1] - a[1]);
           const total = entries.reduce((s, [, v]) => s + v, 0);
           const size = 160;
+          const chartW = size + 220;
+          const chartH = size + 80;
+          const chartOffsetX = 110;
+          const chartOffsetY = 30;
+          const centerX = chartOffsetX + size / 2;
+          const centerY = chartOffsetY + size / 2;
           const r = 58;
           const c = 2 * Math.PI * r;
           const colors = ['#ff6b6b','#f59e0b','#facc15','#22c55e','#14b8a6','#0ea5e9','#6366f1','#a855f7','#ec4899','#f97316','#84cc16','#06b6d4'];
@@ -89,9 +91,9 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
 
           return (
             <View style={styles.expenseChartWrap}>
-              <View style={styles.chartWithMascot}>
-              <Svg width={size + 220} height={size + 80}>
-                <G x={110} y={30}>
+              <View style={[styles.chartWithMascot, { width: chartW, height: chartH }]}>
+              <Svg width={chartW} height={chartH}>
+                <G x={chartOffsetX} y={chartOffsetY}>
                   <G rotation={-90} origin={`${size/2}, ${size/2}`}>
                     {total > 0 ? entries.map(([_, amount], i) => {
                       const frac = amount / total;
@@ -123,7 +125,7 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
                   })}
                 </G>
               </Svg>
-              <View pointerEvents="none" style={styles.chartMascotWrap}>
+              <View pointerEvents="none" style={[styles.chartMascotWrap, { left: centerX - 27, top: centerY - 27 }]}>
                 <MascotSprite variant="happy" width={54} />
               </View>
               </View>
@@ -219,7 +221,6 @@ const styles = StyleSheet.create({
   screenContainer: { flex: 1 },
   screenDark: { backgroundColor: '#08170f' },
   contentContainer: { flex: 1, paddingHorizontal: 16, gap: 10, paddingTop: 8, paddingBottom: 80 },
-  mascotWrap: { alignItems: 'center', marginTop: 2, marginBottom: 2 },
   entriesScrollWrap: { flex: 1, position: 'relative' },
   entriesScroll: { flex: 1 },
   entriesScrollContent: { paddingBottom: 8 },
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   panel: { backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#a7e6b4', borderRadius: 12, padding: 10, gap: 8, marginTop: 8 },
   expenseChartWrap: { alignItems: 'center', justifyContent: 'center', paddingVertical: 8 },
   chartWithMascot: { position: 'relative' },
-  chartMascotWrap: { position: 'absolute', left: '50%', top: '50%', transform: [{ translateX: -27 }, { translateY: -27 }] },
+  chartMascotWrap: { position: 'absolute' },
   totalBudgetText: { color: '#0f5a36', fontWeight: '800', marginTop: 6 },
   panelDark: { backgroundColor: '#102117', borderColor: '#26523a' },
   input: { backgroundColor: '#e6f4ea', borderWidth: 1, borderColor: '#8fdf8e', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 10, color: '#156530' },

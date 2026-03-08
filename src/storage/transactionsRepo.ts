@@ -86,7 +86,7 @@ export async function insertTransaction(input: {
   type: TransactionType;
   category: TransactionCategory;
   name: string;
-  recurrence?: 'none' | 'weekly' | 'monthly';
+  recurrence?: 'none' | 'weekly' | 'biweekly' | 'monthly';
   date: string;
   createdAt: string;
 }): Promise<Transaction> {
@@ -118,7 +118,7 @@ export async function updateTransaction(input: {
   type: TransactionType;
   category: TransactionCategory;
   name: string;
-  recurrence: 'none' | 'weekly' | 'monthly';
+  recurrence: 'none' | 'weekly' | 'biweekly' | 'monthly';
   date: string;
 }): Promise<void> {
   const db = await getDb();
@@ -168,7 +168,7 @@ export async function insertRecurringRule(input: {
   category: TransactionCategory;
   amount: number;
   dayOfMonth: number;
-  frequency: 'monthly' | 'weekly';
+  frequency: 'monthly' | 'weekly' | 'biweekly';
   label: string;
 }): Promise<void> {
   const db = await getDb();
@@ -229,12 +229,18 @@ export async function applyRecurringRulesForMonth(year: number, monthIndex: numb
 
   for (const rule of rules) {
     const dates: Date[] = [];
-    if (rule.frequency === 'weekly') {
+    if (rule.frequency === 'weekly' || rule.frequency === 'biweekly') {
       const weekday = Math.max(0, Math.min(6, rule.dayOfMonth));
       const daysInMonth = new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+      const weeklyDates: Date[] = [];
       for (let d = 1; d <= daysInMonth; d++) {
         const dt = new Date(Date.UTC(year, monthIndex, d, 12, 0, 0));
-        if (dt.getUTCDay() === weekday) dates.push(dt);
+        if (dt.getUTCDay() === weekday) weeklyDates.push(dt);
+      }
+      if (rule.frequency === 'biweekly') {
+        for (let i = 0; i < weeklyDates.length; i += 2) dates.push(weeklyDates[i]);
+      } else {
+        dates.push(...weeklyDates);
       }
     } else {
       const day = Math.max(1, Math.min(28, rule.dayOfMonth));

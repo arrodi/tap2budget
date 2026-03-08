@@ -181,7 +181,7 @@ export default function App() {
     setSelectedCategory(categoriesFor(nextType)[0]);
   };
 
-  const handleSave = async (input?: { dateIso?: string; recurrence?: 'none' | 'weekly' | 'monthly' }): Promise<boolean> => {
+  const handleSave = async (input?: { dateIso?: string; recurrence?: 'none' | 'weekly' | 'biweekly' | 'monthly' }): Promise<boolean> => {
     if (saveLockRef.current) return false;
 
     const amount = Number(amountInput.replace(',', '.'));
@@ -232,7 +232,7 @@ export default function App() {
     type: TransactionType;
     category: TransactionCategory;
     name: string;
-    recurrence: 'none' | 'weekly' | 'monthly';
+    recurrence: 'none' | 'weekly' | 'biweekly' | 'monthly';
     date: string;
   }) => {
     try {
@@ -272,7 +272,7 @@ export default function App() {
     category: TransactionCategory;
     amount: number;
     dayOfMonth: number;
-    frequency: 'weekly' | 'monthly';
+    frequency: 'weekly' | 'biweekly' | 'monthly';
     label: string;
   }) => {
     try {
@@ -420,7 +420,7 @@ export default function App() {
                 type: selectedType,
                 category: selectedCategory,
                 amount: Number(amountInput.replace(',', '.')),
-                dayOfMonth: frequency === 'weekly' ? now.getUTCDay() : now.getUTCDate(),
+                dayOfMonth: frequency === 'monthly' ? now.getUTCDate() : now.getUTCDay(),
                 frequency,
                 label,
               });

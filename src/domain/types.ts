@@ -25,7 +25,7 @@ export type Transaction = {
   type: TransactionType;
   category: TransactionCategory;
   name: string;
-  recurrence?: 'none' | 'weekly' | 'monthly';
+  recurrence?: 'none' | 'weekly' | 'biweekly' | 'monthly';
   date: string; // ISO timestamp
   createdAt: string; // ISO
 };
@@ -49,7 +49,7 @@ export type RecurringRule = {
   category: TransactionCategory;
   amount: number;
   dayOfMonth: number;
-  frequency: 'monthly' | 'weekly';
+  frequency: 'monthly' | 'weekly' | 'biweekly';
   label: string;
   active: boolean;
 };

@@ -28,8 +28,8 @@ type Props = {
   onChangeAmount: (value: string) => void;
   onChangeType: (value: TransactionType) => void;
   onChangeCategory: (value: TransactionCategory) => void;
-  onSave: (input?: { dateIso?: string; recurrence?: 'none' | 'weekly' | 'monthly' }) => Promise<boolean>;
-  onCreateRecurring: (input: { frequency: 'weekly' | 'monthly'; label: string }) => Promise<void>;
+  onSave: (input?: { dateIso?: string; recurrence?: 'none' | 'weekly' | 'biweekly' | 'monthly' }) => Promise<boolean>;
+  onCreateRecurring: (input: { frequency: 'weekly' | 'biweekly' | 'monthly'; label: string }) => Promise<void>;
 };
 
 export function AddTransactionScreen({
@@ -48,9 +48,8 @@ export function AddTransactionScreen({
 }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [advanced, setAdvanced] = useState(false);
-  const [freq, setFreq] = useState<'none' | 'weekly' | 'monthly'>('none');
+  const [freq, setFreq] = useState<'none' | 'weekly' | 'biweekly' | 'monthly'>('none');
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
-  const [recurrenceModalOpen, setRecurrenceModalOpen] = useState(false);
   const [categoryChosen, setCategoryChosen] = useState(false);
   const [saveDone, setSaveDone] = useState(false);
   const [useCustomDate, setUseCustomDate] = useState(false);
@@ -209,11 +208,20 @@ export function AddTransactionScreen({
               style={[styles.input, darkMode && styles.inputDark]}
             />
 
-            <Pressable style={[styles.categoryButton, darkMode && styles.rowDark]} onPress={() => setRecurrenceModalOpen(true)}>
-              <Text style={[styles.categoryButtonValue, darkMode && styles.textDark]}>
-                {freq === 'none' ? 'Recurrence' : freq === 'monthly' ? 'Monthly' : 'Weekly'}
-              </Text>
-            </Pressable>
+            <View style={styles.recurrenceRow}>
+              {([
+                { key: 'weekly', label: 'Weekly' },
+                { key: 'biweekly', label: 'Bi weekly' },
+                { key: 'monthly', label: 'Monthly' },
+              ] as const).map((opt) => {
+                const selected = freq === opt.key;
+                return (
+                  <Pressable key={opt.key} style={[styles.recurrenceBtn, selected && styles.recurrenceBtnActive]} onPress={() => setFreq(opt.key)}>
+                    <Text style={[styles.recurrenceBtnText, selected && styles.recurrenceBtnTextActive]}>{opt.label}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
 
             <Pressable
               style={[styles.advancedBtn, darkMode && styles.rowDark]}
@@ -260,24 +268,6 @@ export function AddTransactionScreen({
         </Pressable>
       </View>
       </View>
-
-      <Modal visible={recurrenceModalOpen} animationType="fade" transparent onRequestClose={() => setRecurrenceModalOpen(false)}>
-        <Pressable style={styles.modalBackdrop} onPress={() => setRecurrenceModalOpen(false)}>
-          <Pressable style={[styles.modalCard, darkMode && styles.formAreaDark]} onPress={() => {}}>
-            <Text style={[styles.modalTitle, darkMode && styles.textDark]}>Select recurrence</Text>
-            <View style={styles.typeTileWrap}>
-              {(['none', 'weekly', 'monthly'] as const).map((r) => {
-                const selected = r === freq;
-                return (
-                  <Pressable key={r} style={[styles.typeTile, darkMode && styles.typeTileDark, selected && styles.categoryTileSelected]} onPress={() => { setFreq(r); setRecurrenceModalOpen(false); }}>
-                    <Text style={[styles.categoryTileText, darkMode && styles.categoryTileTextDark, selected && styles.categoryTileTextSelected]}>{r === 'none' ? 'None' : r === 'weekly' ? 'Weekly' : 'Monthly'}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
 
       <Modal visible={categoryModalOpen} animationType="fade" transparent onRequestClose={() => setCategoryModalOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setCategoryModalOpen(false)}>
@@ -348,6 +338,11 @@ const styles = StyleSheet.create({
   pillText: { color: '#1e6e37', fontWeight: '600' },
   pillTextActive: { color: 'white' },
   advancedBtn: { width: '100%', borderWidth: 1, borderColor: 'rgba(21,92,51,0.14)', borderRadius: 16, paddingVertical: 12, alignItems: 'center', backgroundColor: 'rgba(21,92,51,0.08)' },
+  recurrenceRow: { flexDirection: 'row', gap: 8 },
+  recurrenceBtn: { flex: 1, minHeight: 48, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(21,92,51,0.18)', backgroundColor: 'rgba(21,92,51,0.08)', alignItems: 'center', justifyContent: 'center' },
+  recurrenceBtnActive: { backgroundColor: 'rgba(21,92,51,0.2)', borderColor: 'rgba(21,92,51,0.3)' },
+  recurrenceBtnText: { color: '#145c33', fontWeight: '700', fontSize: 14 },
+  recurrenceBtnTextActive: { color: '#12492b' },
   advancedText: { color: '#166534', fontWeight: '700' },
   advancedHintWrap: { alignItems: 'center', justifyContent: 'center', paddingTop: 4, paddingBottom: 2 },
   advancedHint: { color: '#6f8f78', fontSize: 12, fontWeight: '500' },

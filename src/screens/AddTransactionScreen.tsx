@@ -282,13 +282,20 @@ export function AddTransactionScreen({
       <Modal visible={categoryModalOpen} animationType="fade" transparent onRequestClose={() => setCategoryModalOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setCategoryModalOpen(false)}>
           <Pressable style={[styles.modalCard, darkMode && styles.formAreaDark]} onPress={() => {}}>
-            <Text style={[styles.modalTitle, darkMode && styles.textDark]}>Select category</Text>
+            <Text style={[styles.modalTitle, styles.modalTitleCentered, darkMode && styles.textDark]}>Select category</Text>
             <View style={styles.tileWrap}>
               {categoryOptions.map((category) => {
                 const selected = category === selectedCategory;
                 return (
                   <Pressable key={category} style={[styles.categoryTile, darkMode && styles.categoryTileDark, selected && styles.categoryTileSelected]} onPress={() => { onChangeCategory(category); setCategoryChosen(true); setCategoryModalOpen(false); }}>
-                    <Text style={[styles.categoryTileText, darkMode && styles.categoryTileTextDark, selected && styles.categoryTileTextSelected]}>{category}</Text>
+                    <Text
+                      numberOfLines={1}
+                      adjustsFontSizeToFit
+                      minimumFontScale={0.7}
+                      style={[styles.categoryTileText, darkMode && styles.categoryTileTextDark, selected && styles.categoryTileTextSelected]}
+                    >
+                      {category}
+                    </Text>
                   </Pressable>
                 );
               })}
@@ -351,16 +358,17 @@ const styles = StyleSheet.create({
   saveBtnDisabled: { opacity: 0.7 },
   saveBtnText: { color: '#ffffff', fontWeight: '800', fontSize: 18 },
   modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', alignItems: 'center', justifyContent: 'center', padding: 20 },
-  modalCard: { width: '100%', maxWidth: 520, backgroundColor: '#e6f4ea', borderRadius: 16, borderWidth: 1, borderColor: '#b8efc4', padding: 14, gap: 12 },
+  modalCard: { width: '100%', maxWidth: 520, backgroundColor: '#eff7f1', borderRadius: 16, borderWidth: 1, borderColor: '#b8efc4', padding: 14, gap: 12 },
   modalTitle: { fontSize: 18, fontWeight: '800', color: '#166534' },
+  modalTitleCentered: { textAlign: 'center' },
   typeTileWrap: { width: '100%', gap: 8 },
   typeTile: { width: '100%', paddingVertical: 12, borderRadius: 10, borderWidth: 1, borderColor: '#9dddad', backgroundColor: '#e6f4ea', alignItems: 'center' },
   typeTileDark: { backgroundColor: '#08170f', borderColor: '#26523a' },
-  tileWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' },
-  categoryTile: { width: '31%', minHeight: 52, borderRadius: 10, borderWidth: 1, borderColor: '#9dddad', backgroundColor: '#e6f4ea', alignItems: 'center', justifyContent: 'center' },
-  categoryTileDark: { backgroundColor: '#08170f', borderColor: '#26523a' },
+  tileWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'center' },
+  categoryTile: { width: '47%', minHeight: 74, borderRadius: 12, borderWidth: 1, borderColor: '#9bcfa8', backgroundColor: '#dbeadf', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 10 },
+  categoryTileDark: { backgroundColor: '#12251a', borderColor: '#26523a' },
   categoryTileSelected: { backgroundColor: '#16a34a', borderColor: '#16a34a' },
-  categoryTileText: { color: '#14532d', fontWeight: '700' },
+  categoryTileText: { color: '#14532d', fontWeight: '700', fontSize: 17, textAlign: 'center' },
   categoryTileTextDark: { color: '#d6f5df' },
   categoryTileTextSelected: { color: 'white' },
   accessoryBar: { backgroundColor: '#e5faeb', borderTopWidth: 1, borderTopColor: '#b9ebc7', paddingHorizontal: 12, paddingVertical: 8, alignItems: 'flex-end' },

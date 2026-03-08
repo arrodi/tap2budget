@@ -116,7 +116,7 @@ export function AddTransactionScreen({
           blurOnSubmit
           onSubmitEditing={() => Keyboard.dismiss()}
           inputAccessoryViewID={Platform.OS === 'ios' ? amountAccessoryId : undefined}
-          placeholder="Amount"
+          placeholder="$0.00"
           placeholderTextColor={darkMode ? '#86a893' : '#3e5f47'}
           style={[styles.amountInput, darkMode && styles.amountInputDark]}
         />

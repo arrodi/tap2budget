@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, StyleSheet, Text, TextInput, View, useWindowDimensions } from 'react-native';
 import { Budget, CurrencyCode, Transaction, TransactionCategory, TransactionType } from '../domain/types';
 import { colors, spacing } from '../ui/themeTokens';
+import { MascotSprite } from '../ui/MascotSprite';
 import { BudgetDonutChart } from './transactions/BudgetDonutChart';
 import { BudgetSwipeRow } from './transactions/BudgetSwipeRow';
 import { TransactionTapRow } from './transactions/TransactionTapRow';
@@ -20,7 +21,7 @@ type Props = {
   searchQuery: string;
   onSearchQueryChange: (value: string) => void;
   onDeleteTransaction: (id: string) => Promise<void>;
-  onUpdateTransaction: (input: { id: string; amount: number; type: TransactionType; category: TransactionCategory; name: string; recurrence: 'none' | 'weekly' | 'monthly'; date: string }) => Promise<void>;
+  onUpdateTransaction: (input: { id: string; amount: number; type: TransactionType; category: TransactionCategory; name: string; recurrence: 'none' | 'weekly' | 'biweekly' | 'monthly'; date: string }) => Promise<void>;
   onSaveBudget: (category: TransactionCategory, amount: number) => Promise<void>;
   onDeleteBudget: (id: string) => Promise<void>;
   onSwipeBeyondLeft: () => void;
@@ -147,6 +148,12 @@ export function TransactionsScreen(props: Props) {
                   <Text style={[styles.tableHeaderText, darkMode && styles.metaDark]}>Name / Category</Text>
                   <Text style={[styles.tableHeaderText, darkMode && styles.metaDark]}>Date / Amount</Text>
                 </View>
+                {shownTransactions.length === 0 ? (
+                  <View style={styles.noDataWrap}>
+                    <MascotSprite variant="nodata" width={150} />
+                    <Text style={[styles.meta, darkMode && styles.metaDark]}>No transactions yet</Text>
+                  </View>
+                ) : null}
                 {shownTransactions.map((item, index) => (
                   <TransactionTapRow
                     key={item.id}
@@ -296,6 +303,7 @@ const styles = StyleSheet.create({
   tableWrap: { flex: 1, position: 'relative' },
   transactionsListScroll: { flex: 1 },
   transactionsListContent: { paddingBottom: 18 },
+  noDataWrap: { alignItems: 'center', justifyContent: 'center', paddingVertical: 20, gap: 6 },
 
   tableHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 6, paddingBottom: 6, borderBottomWidth: 1, borderBottomColor: colors.tableBorderLight, marginBottom: 6 },
   tableHeaderRowDark: { borderBottomColor: colors.borderDark },

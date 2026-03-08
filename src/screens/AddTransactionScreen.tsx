@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { TransactionCategory, TransactionType } from '../domain/types';
+import { MascotSprite } from '../ui/MascotSprite';
 
 type Props = {
   darkMode?: boolean;
@@ -135,6 +136,9 @@ export function AddTransactionScreen({
   return (
     <View style={[styles.screenContainer, darkMode && styles.screenContainerDark]}>
       <Text style={[styles.screenTitle, darkMode && styles.textDark]}>Transact!</Text>
+      <View style={styles.mascotWrap}>
+        <MascotSprite variant={selectedType === 'income' ? 'saving' : 'broken'} width={120} />
+      </View>
       <View style={styles.contentWrap}>
       <View style={[styles.formArea, darkMode && styles.formAreaDark]}>
         <TextInput
@@ -303,6 +307,7 @@ const styles = StyleSheet.create({
   screenContainer: { flex: 1, paddingHorizontal: 16, paddingTop: 14, justifyContent: 'flex-start', alignItems: 'stretch', backgroundColor: '#f4faf5' },
   screenContainerDark: { backgroundColor: '#0f1a14' },
   contentWrap: { flex: 1, width: '100%', justifyContent: 'center' },
+  mascotWrap: { width: '100%', alignItems: 'center', marginBottom: 4 },
   formArea: { width: '100%', backgroundColor: 'transparent', borderWidth: 0, borderRadius: 0, paddingHorizontal: 0, paddingVertical: 8, gap: 12 },
   formAreaDark: { backgroundColor: 'transparent', borderColor: 'transparent' },
   screenTitle: { width: '100%', textAlign: 'center', fontSize: 32, fontWeight: '800', color: '#155c33', letterSpacing: 0.2, marginBottom: 12 },

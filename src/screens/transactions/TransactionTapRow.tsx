@@ -11,7 +11,7 @@ type Props = {
   activeId: string | null;
   setActiveId: (id: string | null) => void;
   onDeleteTransaction: (id: string) => Promise<void>;
-  onUpdateTransaction: (input: { id: string; amount: number; type: TransactionType; category: TransactionCategory; name: string; recurrence: 'none' | 'weekly' | 'monthly'; date: string }) => Promise<void>;
+  onUpdateTransaction: (input: { id: string; amount: number; type: TransactionType; category: TransactionCategory; name: string; recurrence: 'none' | 'weekly' | 'biweekly' | 'monthly'; date: string }) => Promise<void>;
   showSeparator: boolean;
   styles: any;
 };
@@ -58,6 +58,7 @@ function TransactionTapRowImpl({ item, currency, darkMode, activeId, setActiveId
                               [
                                 { text: 'None', onPress: async () => { await onUpdateTransaction({ id: item.id, amount, type: item.type, category: nextCategory, name: nextName, recurrence: 'none', date: item.date }); setActiveId(null); } },
                                 { text: 'Weekly', onPress: async () => { await onUpdateTransaction({ id: item.id, amount, type: item.type, category: nextCategory, name: nextName, recurrence: 'weekly', date: item.date }); setActiveId(null); } },
+                                { text: 'Bi weekly', onPress: async () => { await onUpdateTransaction({ id: item.id, amount, type: item.type, category: nextCategory, name: nextName, recurrence: 'biweekly', date: item.date }); setActiveId(null); } },
                                 { text: 'Monthly', onPress: async () => { await onUpdateTransaction({ id: item.id, amount, type: item.type, category: nextCategory, name: nextName, recurrence: 'monthly', date: item.date }); setActiveId(null); } },
                                 { text: 'Cancel', style: 'cancel' },
                               ]
@@ -119,7 +120,7 @@ function TransactionTapRowImpl({ item, currency, darkMode, activeId, setActiveId
         <View>
           <Text style={[styles.name, darkMode && styles.textDark]}>{item.name?.trim() ? item.name : '-'}</Text>
           <Text style={[styles.meta, darkMode && styles.metaDark]}>
-            {item.category}{(item.recurrence ?? 'none') !== 'none' ? ` • ${item.recurrence}` : ''}
+            {item.category}{(item.recurrence ?? 'none') !== 'none' ? ` • ${item.recurrence === 'biweekly' ? 'bi weekly' : item.recurrence}` : ''}
           </Text>
         </View>
         <View style={styles.rightRow}>

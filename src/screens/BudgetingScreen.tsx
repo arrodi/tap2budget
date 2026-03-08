@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, G, Line, Text as SvgText } from 'react-native-svg';
 import { Budget, CurrencyCode, Transaction, TransactionCategory } from '../domain/types';
 import { formatCurrency } from '../ui/format';
+import { MascotSprite } from '../ui/MascotSprite';
 
 type Props = {
   darkMode?: boolean;
@@ -42,10 +43,15 @@ export function BudgetingScreen({ darkMode, currency, budgets, totals, budgetPro
 
   const fadeSolid = darkMode ? 'rgba(15,26,20,1)' : 'rgba(234,255,239,1)';
   const fadeTransparent = darkMode ? 'rgba(15,26,20,0)' : 'rgba(234,255,239,0)';
+  const hasExceededBudget = budgetProgressRows.some((row) => row.usagePct > 100);
 
   return (
     <View style={[styles.screenContainer, darkMode && styles.screenDark]}>
       <View style={styles.contentContainer}>
+
+        <View style={styles.mascotWrap}>
+          <MascotSprite variant={hasExceededBudget ? 'worried' : 'happy'} width={120} />
+        </View>
 
         <View style={styles.overviewRowHorizontal}>
           <View style={[styles.card, styles.cardHorizontal, darkMode && styles.cardDark]}>
@@ -209,6 +215,7 @@ const styles = StyleSheet.create({
   screenContainer: { flex: 1 },
   screenDark: { backgroundColor: '#08170f' },
   contentContainer: { flex: 1, paddingHorizontal: 16, gap: 10, paddingTop: 8, paddingBottom: 80 },
+  mascotWrap: { alignItems: 'center', marginTop: 2, marginBottom: 2 },
   entriesScrollWrap: { flex: 1, position: 'relative' },
   entriesScroll: { flex: 1 },
   entriesScrollContent: { paddingBottom: 8 },
